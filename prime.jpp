@@ -1,0 +1,34 @@
+#!use:io,vec,nabsp
+$!main {
+	ppbegin
+	pbegin
+	u128 i = 2
+	u128 n = 999999999999999989
+	std::vector<u128> numbers = std::vector<u128>();
+	while i*i < n {
+		while n % i == 0 {
+			n /= i
+			// printf("i: %d, n: %d", i, n)
+			numbers.push_back(i);
+		}
+		i++
+	}
+	if n > 1 {
+		numbers.push_back(n)
+	}
+	pend
+	printf("n: %d, i: %d\n", n, i)
+	i32 size = numbers.size()
+	str out = alloc(u8, 30)
+	$!for(i32;i;0..size) {
+		i32 p = 0
+		u128 v = numbers[p]
+		while v > 0 {
+			out[p] = 0x30 + v%10
+			v /= 10
+			p++
+		}
+		out[p] = 0
+		printf("%d: %s\n", i, out)
+	}
+}
