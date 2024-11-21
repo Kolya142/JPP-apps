@@ -1,0 +1,45 @@
+#!use:io,std
+#include <cstdarg>
+
+i32 alog(i32 a, i32 b) {
+	i32 i = 0
+	while a > 0 {
+		a /= b
+		i++
+	}
+	return i
+}
+
+str i2s(i32 num) {
+	i32 S = alog(num, 10)
+	str s = alloc(u8, S)
+	i32 p = 0
+	while num > 0 {
+		s[S-1-p] = 0x30 + num % 10
+		num /= 10
+		p++
+	}
+	return s
+}
+
+i32 s2i(const str s) {
+	i32 v = 0
+	i32 i = 0
+	$!loop {
+		if s[i] == 0 {
+			break
+		}
+		if s[i] >= 0x30 || s[i] <= 0x39 {
+			v *= 10
+			v += s[i] - 0x30
+		}
+		i++
+	}
+	return v
+}
+
+$!main {
+	i32 v = 123
+	printf(i2s(v))
+	printf(i2s(s2i("123")))
+}
