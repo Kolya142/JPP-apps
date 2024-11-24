@@ -1,0 +1,41 @@
+#!use:io,ss+,uni
+#include <math.h>
+// requires jpp 0.0.2
+
+u0 rloop(str scr, float* t) {
+        // Render
+        $!for(i32;j;0..40) {
+                $!for(i32;i;0..80) {
+                        float x = (((float)i)/80.0-0.5)*.5
+                        float y = (((float)j)/40.0-0.5)*.5
+                        //x*=.5
+                        if sqrtf(powf(x+sinf(*t)*.1, 2)+powf(y+cosf(*t)*.2, 2)) < 0.05 {
+                                scr[i+j*80] = '#'
+                        }
+                        else {
+                                scr[i+j*80] = '-'
+                        }
+                }
+        }
+        // Blit screen
+        $!for(i32;i;0..80*40) {
+                if i % 80 == 79 {
+                        putchar('\n')
+                }
+                putchar(scr[i])
+        }
+}
+
+// Main "function"
+
+!% i32 i = 0
+float t = 0
+str screen = alloc(u8, 80*40)
+memset(screen, ' ', 80*40)
+printf("\x1b[2J")
+$!loop {
+    printf("\x1b[H ")
+    rloop(screen, &t)
+    t += 0.0001
+}
+!%
